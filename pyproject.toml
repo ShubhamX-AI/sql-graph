@@ -1,7 +1,14 @@
 [project]
 name = "sql-graph"
 version = "0.1.0"
-description = "Add your description here"
+description = "NL2SQL setup pipeline for extracting a MySQL schema, enriching it with OpenAI, and storing searchable metadata in Neo4j."
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "mysql-connector-python==8.3.0",
+    "neo4j==5.19.0",
+    "openai>=1.0.0",
+    "python-dotenv==1.0.1",
+    "rapidfuzz==3.9.0",
+    "tqdm==4.66.4",
+]

@@ -8,3 +8,18 @@ wheels/
 
 # Virtual environments
 .venv
+
+# Credentials
+.env
+
+# Pipeline state
+pipeline_progress.json
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+
+.codex
