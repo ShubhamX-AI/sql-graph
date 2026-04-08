@@ -37,14 +37,16 @@ The system has two distinct phases that share the Neo4j graph as the handoff poi
 
 1. **`pipeline/extractor.py`** — reads MySQL `information_schema` to produce `RawTable` / `RawColumn` dataclasses with schema, sample rows, FK constraints, and PK metadata.
 
-2. **`pipeline/enricher.py`** — sends each `RawTable` to OpenAI (`gpt-5-mini` by default) with a structured prompt asking for human-readable names, descriptions, and example questions. Returns `EnrichedTable` / `EnrichedColumn` dataclasses. The model must return raw JSON (no markdown fences).
+2. **`db/connection.py`** — owns the shared MySQL connection helper used by both the pipeline and query-time SQL execution.
 
-3. **`pipeline/relationships.py`** — three-layer discovery returning `Relationship` dataclasses:
+3. **`pipeline/enricher.py`** — sends each `RawTable` to OpenAI (`gpt-5-mini` by default) with a structured prompt asking for human-readable names, descriptions, and example questions. Returns `EnrichedTable` / `EnrichedColumn` dataclasses. The model must return raw JSON (no markdown fences).
+
+4. **`pipeline/relationships.py`** — three-layer discovery returning `Relationship` dataclasses:
    - Layer 1: FK constraints from `information_schema` (confidence 1.0)
    - Layer 2: Columns sharing the same `human_name` across tables (confidence 0.7)
    - Layer 3: Value overlap sampling to confirm Layer 2 (boosts confidence to ~0.9, discards if below `VALUE_OVERLAP_THRESHOLD`)
 
-4. **`graph/store.py` (`SchemaGraph`)** — writes to Neo4j:
+5. **`graph/store.py` (`SchemaGraph`)** — writes to Neo4j:
    - `(:Table)` nodes with OpenAI vector embeddings (default `text-embedding-3-small`, 1536-dim)
    - `(:Column)` nodes linked via `[:HAS_COLUMN]`
    - `[:REFERENCES]` edges between Column nodes (with `join_condition`, `confidence`, `source`)

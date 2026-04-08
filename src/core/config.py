@@ -24,7 +24,7 @@ NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD")
 
 # ── Pipeline settings ─────────────────────────────────────────────────────────
 # How many rows to sample per table for enrichment context
-SAMPLE_ROWS = 5
+SAMPLE_ROWS = 20
 
 # Only consider a column-pair as related if value overlap exceeds this
 VALUE_OVERLAP_THRESHOLD = 0.6

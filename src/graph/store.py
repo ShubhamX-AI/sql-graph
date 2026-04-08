@@ -4,10 +4,10 @@
 from __future__ import annotations
 from neo4j import GraphDatabase
 
-from pipeline.enricher import EnrichedTable
-from pipeline.relationships import Relationship
-import core.config as config
-import core.openai_client as openai_client
+from src.pipeline.enricher import EnrichedTable
+from src.pipeline.relationships import Relationship
+import src.core.config as config
+import src.core.openai_client as openai_client
 
 
 class SchemaGraph:

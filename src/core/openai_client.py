@@ -5,7 +5,7 @@ from typing import Any
 
 from openai import OpenAI
 
-import core.config as config
+import src.core.config as config
 
 
 def create_client() -> OpenAI:

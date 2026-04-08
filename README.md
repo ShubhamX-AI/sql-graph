@@ -36,6 +36,9 @@ sql-graph/
 ├── run_pipeline.py         # One-time setup orchestrator
 ├── query.py                # Ask natural language questions
 │
+├── db/
+│   └── connection.py       # Shared MySQL connection helper
+│
 ├── pipeline/
 │   ├── extractor.py        # Pull raw schema + sample rows from MySQL
 │   ├── enricher.py         # Calls OpenAI to make schema human-readable
@@ -51,6 +54,9 @@ sql-graph/
 
 ```text
 MySQL DB
+  │
+  ├─ db/connection.py
+  │    → shared MySQL connection setup
   │
   ├─ pipeline/extractor.py
   │    → raw schema: tables, columns, types, sample rows, FK constraints

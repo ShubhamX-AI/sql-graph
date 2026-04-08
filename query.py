@@ -8,9 +8,10 @@
 import sys
 from openai import OpenAI
 
-from pipeline import extractor
-from graph.store import SchemaGraph
-import core.openai_client as openai_client
+from src.db.connection import connect
+from src.pipeline import extractor
+from src.graph.store import SchemaGraph
+import src.core.openai_client as openai_client
 
 
 SYSTEM_PROMPT = """You are an expert SQL analyst for a MySQL database.
@@ -49,7 +50,7 @@ def ask(question: str) -> str:
     )
 
     # Step 3: Run the SQL on MySQL (read-only connection)
-    conn = extractor.connect()
+    conn = connect()
     try:
         cur = conn.cursor(dictionary=True)
         cur.execute(sql)

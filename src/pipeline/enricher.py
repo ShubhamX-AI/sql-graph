@@ -8,8 +8,8 @@ from dataclasses import dataclass, field
 from openai import OpenAI
 
 from .extractor import RawTable
-import core.config as config
-import core.openai_client as openai_client
+import src.core.config as config
+import src.core.openai_client as openai_client
 
 
 @dataclass

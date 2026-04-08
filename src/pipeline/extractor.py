@@ -3,10 +3,8 @@
 # Produces a list of RawTable objects — input to the enricher.
 
 from __future__ import annotations
-import mysql.connector
 from dataclasses import dataclass, field
-from typing import Optional
-import core.config as config
+import src.core.config as config
 
 
 @dataclass
@@ -34,17 +32,6 @@ class RawTable:
     columns: list[RawColumn]
     sample_rows: list[dict]     # Up to SAMPLE_ROWS actual data rows
     fk_constraints: list[FKConstraint] = field(default_factory=list)
-
-
-def connect() -> mysql.connector.MySQLConnection:
-    return mysql.connector.connect(
-        host     = config.MYSQL_HOST,
-        port     = config.MYSQL_PORT,
-        user     = config.MYSQL_USER,
-        password = config.MYSQL_PASSWORD,
-        database = config.MYSQL_DATABASE,
-    )
-
 
 def extract_all_tables(conn) -> list[RawTable]:
     tables = _get_table_names(conn)

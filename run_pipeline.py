@@ -13,10 +13,12 @@ from pathlib import Path
 
 from tqdm import tqdm
 
-import core.config as config
-import core.openai_client as openai_client
-from pipeline import extractor, enricher, relationships
-from graph.store import SchemaGraph
+import src.core.config as config
+import src.core.openai_client as openai_client
+from src.db.connection import connect
+from src.pipeline import relationships
+from src.graph.store import SchemaGraph
+from src.pipeline import enricher, extractor
 
 
 PROGRESS_FILE = Path("pipeline_progress.json")
@@ -56,7 +58,7 @@ def run():
 
     # ── Step 1: Connect to MySQL ─────────────────────────────────────────────
     print("Connecting to MySQL...")
-    mysql_conn = extractor.connect()
+    mysql_conn = connect()
     print(f"Connected to {config.MYSQL_DATABASE} @ {config.MYSQL_HOST}\n")
 
     # ── Step 2: Extract raw schema ───────────────────────────────────────────
