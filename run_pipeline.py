@@ -27,8 +27,10 @@ PROGRESS_FILE = Path("pipeline_progress.json")
 def load_progress() -> set[str]:
     """Returns set of table names already successfully processed."""
     if PROGRESS_FILE.exists():
-        data = json.loads(PROGRESS_FILE.read_text())
-        return set(data.get("done", []))
+        content = PROGRESS_FILE.read_text().strip()
+        if content:
+            data = json.loads(content)
+            return set(data.get("done", []))
     return set()
 
 
@@ -38,7 +40,7 @@ def save_progress(done: set[str]):
 
 def validate_config():
     required = {
-        "MYSQL_USER":     config.MYSQL_USER,
+        "MYSQL_USER": config.MYSQL_USER,
         "MYSQL_PASSWORD": config.MYSQL_PASSWORD,
         "MYSQL_DATABASE": config.MYSQL_DATABASE,
         "OPENAI_API_KEY": config.OPENAI_API_KEY,
@@ -77,7 +79,7 @@ def run():
     done_tables = load_progress()
     enriched_tables: list[enricher.EnrichedTable] = []
 
-    remaining    = [t for t in raw_tables if t.name not in done_tables]
+    remaining = [t for t in raw_tables if t.name not in done_tables]
     already_done = len(raw_tables) - len(remaining)
     if already_done:
         print(f"Resuming — {already_done} tables already enriched, skipping them.")
@@ -104,14 +106,16 @@ def run():
 
     # ── Step 5: Relationship discovery ───────────────────────────────────────
     if not enriched_tables:
-        print("\nAll tables already processed. Running relationship discovery on full DB...")
+        print(
+            "\nAll tables already processed. Running relationship discovery on full DB..."
+        )
         all_raw = extractor.extract_all_tables(mysql_conn)
         enriched_tables = _build_stubs_for_relationship_discovery(all_raw)
 
     print(f"\nDiscovering relationships across {len(enriched_tables)} tables...")
     rels = relationships.discover_all(enriched_tables, mysql_conn)
     print(f"Found {len(rels)} relationships:")
-    fk_count   = sum(1 for r in rels if r.source == "fk")
+    fk_count = sum(1 for r in rels if r.source == "fk")
     name_count = sum(1 for r in rels if "name_match" in r.source)
     print(f"  FK constraints:  {fk_count}")
     print(f"  Name + overlap:  {name_count}")
@@ -127,7 +131,7 @@ def run():
     print("\n=== Pipeline complete! ===")
     print(f"Tables stored:        {len(done_tables)}")
     print(f"Relationships stored: {len(rels)}")
-    print("\nSchema graph is ready. Run: python query.py \"your question\"\n")
+    print('\nSchema graph is ready. Run: python query.py "your question"\n')
 
 
 def _build_stubs_for_relationship_discovery(
@@ -141,23 +145,25 @@ def _build_stubs_for_relationship_discovery(
     for raw in raw_tables:
         cols = [
             enricher.EnrichedColumn(
-                raw_name       = c.name,
-                human_name     = c.name,
-                data_type      = c.data_type,
-                description    = "",
-                is_primary_key = c.is_primary_key,
-                is_foreign_key = c.is_foreign_key,
+                raw_name=c.name,
+                human_name=c.name,
+                data_type=c.data_type,
+                description="",
+                is_primary_key=c.is_primary_key,
+                is_foreign_key=c.is_foreign_key,
             )
             for c in raw.columns
         ]
-        stubs.append(enricher.EnrichedTable(
-            raw_name       = raw.name,
-            human_name     = raw.name,
-            description    = "",
-            columns        = cols,
-            common_queries = [],
-            raw_table      = raw,
-        ))
+        stubs.append(
+            enricher.EnrichedTable(
+                raw_name=raw.name,
+                human_name=raw.name,
+                description="",
+                columns=cols,
+                common_queries=[],
+                raw_table=raw,
+            )
+        )
     return stubs
 
 
