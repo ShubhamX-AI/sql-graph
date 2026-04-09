@@ -22,6 +22,23 @@ uv run python query.py "Show me top 10 customers by revenue this year"
 uv run python query.py "How many active projects are there per city?"
 ```
 
+## Synthetic Data
+
+To populate a local MySQL dev database with synthetic rows, use the generic
+seeder in [synthetic_data/seed_mysql.py](/home/shubham_halder/CODE/ONESPACE/sql-graph/synthetic_data/seed_mysql.py).
+
+```bash
+uv run python synthetic_data/seed_mysql.py --rows-per-table 25
+```
+
+The seeder reads your existing schema, orders tables using foreign-key
+dependencies where possible, and generates fake values based on column names
+and data types. Use `MYSQL_SEED_*` environment variables for a write-enabled
+dev user if your normal `MYSQL_*` credentials are read-only. If the target
+database is empty, run `uv run python synthetic_data/seed_mysql.py
+--create-demo-schema` to create a small demo schema
+(`customers`, `products`, `orders`, `order_items`) before seeding.
+
 ## Project Architecture
 
 ```text
