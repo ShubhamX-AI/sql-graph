@@ -63,6 +63,13 @@ class SchemaGraph:
         Given a natural language question, returns a ready-to-use prompt
         section containing relevant table schemas + join conditions.
         """
+        bundle = self.retrieve_context_bundle(question, top_k=top_k)
+        return bundle["prompt"]
+
+    def retrieve_context_bundle(self, question: str, top_k: int = 6) -> dict:
+        """
+        Returns the prompt block and the structured schema pieces used at query time.
+        """
         q_embedding = self._make_embedding(question)
 
         with self._driver.session() as s:
@@ -71,7 +78,12 @@ class SchemaGraph:
             columns     = s.execute_read(self._get_columns_for_tables, table_names)
             joins       = s.execute_read(self._get_join_paths, table_names)
 
-        return _build_prompt_block(tables, columns, joins)
+        return {
+            "prompt": _build_prompt_block(tables, columns, joins),
+            "tables": tables,
+            "columns": columns,
+            "joins": joins,
+        }
 
     # ── Neo4j write transactions ─────────────────────────────────────────────────
 

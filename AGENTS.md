@@ -26,6 +26,10 @@ Follow the current project style:
 - Prefer type hints (`list[str]`, `set[str]`) on public/internal function signatures.
 - Keep modules focused by responsibility (`src/pipeline/*` for pipeline stages, `src/graph/*` for Neo4j).
 - Use concise docstrings/comments only where behavior is not obvious.
+- The main coding agents are software engineers, so write code accordingly.
+- Senior software engineers prefer simpler, more readable code over complex solutions.
+- Move implementation toward simplicity, not complexity.
+- Fix the exact thing you were asked to fix, not other unrelated things.
 
 ## Testing Guidelines
 There is currently no automated `tests/` suite configured. Validate changes with targeted smoke tests:

@@ -42,5 +42,15 @@ EMBEDDING_DIMS  = int(os.getenv("OPENAI_EMBEDDING_DIMS", 1536))
 VECTOR_INDEX_NAME    = os.getenv("NEO4J_VECTOR_INDEX_NAME", "table_embeddings_openai")
 VECTOR_PROPERTY_NAME = os.getenv("NEO4J_VECTOR_PROPERTY_NAME", "embedding_openai")
 
+# ── Query-time fuzzy value resolution ─────────────────────────────────────────
+ENABLE_FUZZY_VALUE_RESOLUTION = (
+    os.getenv("ENABLE_FUZZY_VALUE_RESOLUTION", "true").lower() == "true"
+)
+FUZZY_MATCH_MIN_SCORE = int(os.getenv("FUZZY_MATCH_MIN_SCORE", 90))
+FUZZY_MATCH_MIN_LEAD = int(os.getenv("FUZZY_MATCH_MIN_LEAD", 5))
+FUZZY_MATCH_MAX_CANDIDATES = int(os.getenv("FUZZY_MATCH_MAX_CANDIDATES", 2000))
+FUZZY_MATCH_CACHE_TTL_SECONDS = int(os.getenv("FUZZY_MATCH_CACHE_TTL_SECONDS", 300))
+FUZZY_MATCH_MIN_VALUE_LENGTH = int(os.getenv("FUZZY_MATCH_MIN_VALUE_LENGTH", 3))
+
 # Seconds to wait between LLM API calls
 LLM_CALL_DELAY = 1.0

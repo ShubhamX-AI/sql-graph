@@ -103,8 +103,10 @@ MySQL DB
 User question
   │
   ├─ Embed question → vector similarity search → top-6 relevant Table nodes
+  ├─ Extract likely text filters from the question for the retrieved text columns
+  ├─ Resolve misspelled values against live DB values with exact/partial/fuzzy matching
   ├─ Graph traversal → JOIN paths between those tables
-  ├─ Build focused schema prompt (only relevant tables, exact join conditions)
+  ├─ Build focused schema prompt (relevant tables, exact join conditions, resolved values)
   ├─ OpenAI generates SQL
   ├─ Run SQL on MySQL (read-only)
   └─ OpenAI summarizes result in plain English
@@ -126,6 +128,6 @@ Dependencies are managed through [pyproject.toml](/home/shubhan_halder/CODE/Ones
 - `mysql-connector-python`: MySQL connection
 - `openai`: OpenAI API for schema enrichment, embeddings, and SQL generation
 - `neo4j`: Graph database driver
-- `rapidfuzz`: Fuzzy string matching for value resolver
+- `rapidfuzz`: Query-time fuzzy value resolution for misspelled text filters
 - `python-dotenv`: Load credentials from `.env`
 - `tqdm`: Progress bars

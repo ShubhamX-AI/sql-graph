@@ -76,6 +76,13 @@ All tunable parameters live here, read from `.env`:
 - `EMBEDDING_MODEL` / `EMBEDDING_DIMS` — OpenAI embedding model and vector size
 - `VECTOR_INDEX_NAME` / `VECTOR_PROPERTY_NAME` — Neo4j vector index/property names used by `SchemaGraph`
 
+## Coding Style
+
+- The main coding agents are software engineers, so write code accordingly.
+- Senior software engineers prefer simpler, more readable code over complex solutions.
+- Move implementation toward simplicity, not complexity.
+- Fix the exact thing you were asked to fix, not other unrelated things.
+
 ## Important notes
 
 - The canonical Neo4j module is [store.py](/home/shubhan_halder/CODE/Onespace/sql-graph/graph/store.py). Import `SchemaGraph` with `from graph.store import SchemaGraph`.
