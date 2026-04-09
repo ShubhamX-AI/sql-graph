@@ -21,11 +21,8 @@ class Relationship:
     confidence:     float
     source:         str     # "fk" | "name_match" | "name_match+value_overlap"
 
-
-def discover_all(
-    enriched: list[EnrichedTable],
-    conn,                           # MySQL connection for value overlap
-) -> list[Relationship]:
+# MySQL connection for value overlap
+def discover_all(enriched: list[EnrichedTable],conn) -> list[Relationship]:
 
     layer1 = _from_fk_constraints(enriched)
     layer2_candidates = _from_name_matching(enriched)
