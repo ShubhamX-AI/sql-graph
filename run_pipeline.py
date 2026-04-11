@@ -105,12 +105,10 @@ def run():
     print(f"\nAll {len(done_tables)} tables stored in Neo4j.")
 
     # ── Step 5: Relationship discovery ───────────────────────────────────────
-    if not enriched_tables:
-        print(
-            "\nAll tables already processed. Running relationship discovery on full DB..."
-        )
-        all_raw = extractor.extract_all_tables(mysql_conn)
-        enriched_tables = _build_stubs_for_relationship_discovery(all_raw)
+    # Always run on the full schema. If this run only enriched a subset of tables,
+    # build stubs for the rest so discovery isn't limited to newly-processed tables.
+    if len(enriched_tables) < len(raw_tables):
+        enriched_tables = _build_stubs_for_relationship_discovery(raw_tables)
 
     print(f"\nDiscovering relationships across {len(enriched_tables)} tables...")
     rels = relationships.discover_all(enriched_tables, mysql_conn)

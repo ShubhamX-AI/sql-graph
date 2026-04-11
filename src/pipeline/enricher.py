@@ -62,12 +62,14 @@ ENRICHMENT_SCHEMA = {
 
 def enrich_table(raw: RawTable, client: OpenAI) -> EnrichedTable:
     prompt = _build_prompt(raw)
+    # Scale token budget with column count; each column needs ~60 tokens in the JSON response.
+    max_output_tokens = min(8000, max(2000, len(raw.columns) * 60 + 600))
     data = openai_client.generate_json(
         client,
         prompt=prompt,
         schema_name="table_enrichment",
         schema=ENRICHMENT_SCHEMA,
-        max_output_tokens=1500,
+        max_output_tokens=max_output_tokens,
     )
     time.sleep(config.LLM_CALL_DELAY)
     return _parse_response(data, raw)
